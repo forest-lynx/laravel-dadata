@@ -8,7 +8,7 @@ use DateTime;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Attributes\WithTransformer;
-use App\Services\DaData\Company\Casts\ConvertDateIsNumberToString;
+use ForestLynx\DaData\Casts\ConvertDateIsNumberToString;
 use ForestLynx\DaData\Enums\BranchType;
 use ForestLynx\DaData\Enums\CompanyType;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
