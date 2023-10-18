@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace ForestLynx\DaData\DTOs\Company;
 
-use App\Services\DaData\Company\Casts\ConvertDateIsNumberToString;
+use ForestLynx\DaData\Casts\ConvertDateIsNumberToString;
 use DateTime;
 use ForestLynx\DaData\Enums\CompanyStatus;
 use Spatie\LaravelData\Data;
