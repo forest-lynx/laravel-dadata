@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\DaData\Company\Casts;
+namespace ForestLynx\DaData\Casts;
 
 use DateTime;
 use DateTimeZone;
