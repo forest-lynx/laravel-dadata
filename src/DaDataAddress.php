@@ -3,6 +3,8 @@
 namespace ForestLynx\DaData;
 
 use ForestLynx\DaData\Enums\Language;
+use Spatie\LaravelData\DataCollection;
+use ForestLynx\DaData\DTOs\Address\AddressDTO;
 
 /**
  * Class DaDataAddress
@@ -21,9 +23,11 @@ class DaDataAddress extends DaDataService
      * @return array
      * @throws \Exception
      */
-    public function standardization(string $address): array
+    public function standardization(string $address): DataCollection|array
     {
-        return $this->cleanerApi()->post('clean/address', [$address]);
+        $data = $this->cleanerApi()->post('clean/address', [$address]);
+
+        return $this->collection($data['suggestions']);
     }
 
     /**
@@ -52,9 +56,9 @@ class DaDataAddress extends DaDataService
         array $locations_boost = [],
         array $from_bound = [],
         array $to_bound = []
-    ): array {
+    ): DataCollection|array {
 
-        return $this->suggestApi()->post('rs/suggest/address', [
+        $data = $this->suggestApi()->post('rs/suggest/address', [
             'query'             => $query,
             'count'             => $count,
             'language'          => Language::$map[$language] ?? Language::$map[Language::RU],
@@ -64,6 +68,7 @@ class DaDataAddress extends DaDataService
             'from_bound'        => $from_bound,
             'to_bound'          => $to_bound,
         ]);
+        return $this->collection($data['suggestions']);
     }
 
     /**
@@ -85,14 +90,15 @@ class DaDataAddress extends DaDataService
         int $count = 10,
         int $radius_meters = 100,
         int $language = Language::RU
-    ): array {
-        return $this->suggestApi()->get('rs/geolocate/address', [
+    ): DataCollection|array {
+        $data = $this->suggestApi()->get('rs/geolocate/address', [
             'lat'              => $lat,
             'lon'              => $lon,
             'count'            => $count,
             'radius_meters'    => $radius_meters,
             'language'         => Language::$map[$language] ?? Language::$map[Language::RU],
         ]);
+        return $this->collection($data['suggestions']);
     }
 
     /**
@@ -104,13 +110,14 @@ class DaDataAddress extends DaDataService
      * @return array
      * @throws \Exception
      */
-    public function iplocate(string $ip, int $count = 10, int $language = Language::RU): array
+    public function iplocate(string $ip, int $count = 10, int $language = Language::RU): DataCollection|array
     {
-        return $this->suggestApi()->get('rs/iplocate/address', [
+        $data = $this->suggestApi()->get('rs/iplocate/address', [
             'ip'        => $ip,
             'count'     => $count,
             'language'  => Language::$map[$language] ?? Language::$map[Language::RU],
         ]);
+        return $this->collection($data['suggestions']);
     }
 
     /**
@@ -122,13 +129,14 @@ class DaDataAddress extends DaDataService
      * @return array
      * @throws \Exception
      */
-    public function id(string $id, int $count = 10, int $language = Language::RU): array
+    public function id(string $id, int $count = 10, int $language = Language::RU): DataCollection|array
     {
-        return $this->suggestApi()->post('rs/findById/address', [
+        $data = $this->suggestApi()->post('rs/findById/address', [
             'query'     => $id,
             'count'     => $count,
             'language'  => Language::$map[$language] ?? Language::$map[Language::RU],
         ]);
+        return $this->collection($data['suggestions']);
     }
 
     /**
@@ -140,13 +148,15 @@ class DaDataAddress extends DaDataService
      * @return array
      * @throws \Exception
      */
-    public function postalUnitByAddress(string $address, int $count = 10, int $language = Language::RU): array
+    public function postalUnitByAddress(string $address, int $count = 10, int $language = Language::RU): DataCollection|array
     {
-        return $this->suggestApi()->post('rs/suggest/postal_unit', [
+        $data = $this->suggestApi()->post('rs/suggest/postal_unit', [
             'query'     => $address,
             'count'     => $count,
             'language'  => Language::$map[$language] ?? Language::$map[Language::RU],
         ]);
+
+        return $this->collection($data['suggestions']);
     }
 
     /**
@@ -158,13 +168,15 @@ class DaDataAddress extends DaDataService
      * @return array
      * @throws \Exception
      */
-    public function postalUnitById(int $code, int $count = 10, int $language = Language::RU): array
+    public function postalUnitById(int $code, int $count = 10, int $language = Language::RU): DataCollection|array
     {
-        return $this->suggestApi()->post('rs/findById/postal_unit', [
+        $data = $this->suggestApi()->post('rs/findById/postal_unit', [
             'query'     => $code,
             'count'     => $count,
             'language'  => Language::$map[$language] ?? Language::$map[Language::RU],
         ]);
+
+        return $this->collection($data['suggestions']);
     }
 
     /**
@@ -178,15 +190,17 @@ class DaDataAddress extends DaDataService
      * @return array
      * @throws \Exception
      */
-    public function postalUnitByGeoLocate(float $lat, float $lon, int $radius_meters = 1000, int $count = 10, int $language = Language::RU): array
+    public function postalUnitByGeoLocate(float $lat, float $lon, int $radius_meters = 1000, int $count = 10, int $language = Language::RU): DataCollection|array
     {
-        return $this->suggestApi()->post('rs/geolocate/postal_unit', [
+        $data = $this->suggestApi()->post('rs/geolocate/postal_unit', [
             'lat'           => $lat,
             'lon'           => $lon,
             'radius_meters' => $radius_meters,
             'count'         => $count,
             'language'      => Language::$map[$language] ?? Language::$map[Language::RU],
         ]);
+
+        return $this->collection($data['suggestions']);
     }
 
 
@@ -197,9 +211,11 @@ class DaDataAddress extends DaDataService
      * @return array
      * @throws \Exception
      */
-    public function delivery(string $code): array
+    public function delivery(string $code): DataCollection|array
     {
-        return $this->suggestApi()->post('rs/findById/delivery', ['query' => $code]);
+        $data = $this->suggestApi()->post('rs/findById/delivery', ['query' => $code]);
+
+        return $this->collection($data['suggestions']);
     }
 
     /**
@@ -209,8 +225,15 @@ class DaDataAddress extends DaDataService
      * @return array
      * @throws \Exception
      */
-    public function fias(string $code): array
+    public function fias(string $code): DataCollection|array
     {
-        return $this->suggestApi()->post('rs/findById/fias', ['query' => $code]);
+        $data = $this->suggestApi()->post('rs/findById/fias', ['query' => $code]);
+
+        return $this->collection($data['suggestions']);
+    }
+
+    protected function collection(array $data): DataCollection
+    {
+        return AddressDTO::collection($data)->wrap('suggestions');
     }
 }
