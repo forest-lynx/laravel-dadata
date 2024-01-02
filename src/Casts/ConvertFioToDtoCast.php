@@ -17,8 +17,12 @@ class ConvertFioToDtoCast implements Cast
 
     private function convert(string $fio): array
     {
-        [$surname, $name, $patronymic] = str($fio)->trim()->title()->explode(' ', 3);
+        $fio_data = str($fio)->trim()->title()->explode(' ', 3);
 
+        $surname = $fio_data[0] ?? '';
+        $name = $fio_data[1] ?? '';
+        $patronymic = $fio_data[2] ?? '';
+        
         return compact('surname', 'name', 'patronymic');
     }
 }
