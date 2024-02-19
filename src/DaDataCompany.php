@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 use Spatie\LaravelData\DataCollection;
 
 /**
- * Class DaDataPhone
+ * Class DaDataCompany
  * @package ForestLynx\DaData
  */
 class DaDataCompany extends DaDataService

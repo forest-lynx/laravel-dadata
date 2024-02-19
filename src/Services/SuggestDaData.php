@@ -8,40 +8,9 @@ class SuggestDaData
 {
     use HttpClient;
 
-    /**
-     * @var string
-     */
     protected $api  = 'https://suggestions.dadata.ru/suggestions/api';
-
-    /**
-     * @var string
-     */
-    protected $v    = '4_1';
-
-    /**
-     * @var string application/json
-     */
     protected $content_type = 'application/json';
-
-    /**
-     * @var string
-     */
     protected $accept       = 'application/json';
-
-    /**
-     * @var string
-     */
-    protected $token;
-
-    /**
-     * @var string
-     */
-    protected $secret;
-
-    /**
-     * @var int
-     */
-    protected $timeout;
 
     /**
      * SuggestDaData constructor.
@@ -51,8 +20,12 @@ class SuggestDaData
      * @param int $timeout
      * @param string $v
      */
-    public function __construct(string $token, string $secret, int $timeout = 10, $v = '4_1')
-    {
+    public function __construct(
+        protected string $token,
+        protected string $secret,
+        protected ?int $timeout = 10,
+        protected ?string $v = '4_1'
+    ) {
         $this->token    = $token;
         $this->secret   = $secret;
         $this->timeout  = $timeout;

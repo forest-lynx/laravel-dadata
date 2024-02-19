@@ -8,35 +8,8 @@ class CleanerDaData
 {
     use HttpClient;
 
-    /**
-     * @var string
-     */
     protected $api  = 'https://cleaner.dadata.ru/api';
-
-    /**
-     * @var string
-     */
-    protected $v    = 'v1';
-
-    /**
-     * @var string application/json
-     */
     protected $content_type = 'application/json';
-
-    /**
-     * @var string
-     */
-    protected $token;
-
-    /**
-     * @var string
-     */
-    protected $secret;
-
-    /**
-     * @var int
-     */
-    protected $timeout;
 
     /**
      * CleanerDaData constructor.
@@ -46,12 +19,12 @@ class CleanerDaData
      * @param int $timeout
      * @param string $v
      */
-    public function __construct(string $token, string $secret, int $timeout = 10, $v = 'v1')
-    {
-        $this->token    = $token;
-        $this->secret   = $secret;
-        $this->timeout  = $timeout;
-        $this->v        = $v;
+    public function __construct(
+        protected string $token,
+        protected string $secret,
+        protected ?int $timeout = 10,
+        protected ?string $v = 'v1'
+    ) {
     }
 
     /**
