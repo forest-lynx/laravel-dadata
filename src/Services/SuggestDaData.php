@@ -26,10 +26,6 @@ class SuggestDaData
         protected ?int $timeout = 10,
         protected ?string $v = '4_1'
     ) {
-        $this->token    = $token;
-        $this->secret   = $secret;
-        $this->timeout  = $timeout;
-        $this->v        = $v;
     }
 
     /**

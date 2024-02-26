@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace ForestLynx\DaData\DTOs\Company;
 
+use Illuminate\Support\Collection;
 use Spatie\LaravelData\Data;
 
 class CompanyDataDTO extends Data

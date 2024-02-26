@@ -14,11 +14,7 @@ use ForestLynx\DaData\DaDataCompany;
 class DaDataServiceProvider extends ServiceProvider
 {
     protected $namespace = "dadata";
-    /**
-     * Register services.
-     *
-     * @return void
-     */
+
     public function register()
     {
         $this->app->singleton('da_data_address', function () {
@@ -36,11 +32,6 @@ class DaDataServiceProvider extends ServiceProvider
         $this->app->alias('da_data_bank', DaDataCompany::class);
     }
 
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
     public function boot()
     {
         $this->publishes([

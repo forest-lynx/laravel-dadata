@@ -10,10 +10,10 @@ use ForestLynx\DaData\Enums\CompanyScope;
 use ForestLynx\DaData\Enums\CompanyStatus;
 use ForestLynx\DaData\Enums\CompanyType;
 use Illuminate\Support\Collection;
-use Spatie\LaravelData\DataCollection;
+use Spatie\LaravelData\Data;
 
 /**
- * Class DaDataCompany
+ * Class DaDataPhone
  * @package ForestLynx\DaData
  */
 class DaDataCompany extends DaDataService
@@ -28,7 +28,7 @@ class DaDataCompany extends DaDataService
         string $kpp = null,
         BranchType $branch_type = null,
         CompanyType $type = null
-    ): DataCollection|array {
+    ): Collection {
 
         $data = $this->suggestApi()->post('rs/findById/party', [
             'query'             => $innOrOgrn,
@@ -37,8 +37,7 @@ class DaDataCompany extends DaDataService
             'branch_type'       => $branch_type?->value ?? '',
             'type'              => $type?->value ?? '',
         ]);
-
-        return $this->collection($data['suggestions']);
+        return $this->collection(CompanyDataDTO::collect($data['suggestions']));
     }
 
     /**
@@ -55,7 +54,7 @@ class DaDataCompany extends DaDataService
         CompanyType $type = null,
         string $locations = null,
         string $locations_boost = null
-    ): DataCollection|array {
+    ): Collection {
         $status = \collect($status);
         /*for ($i = 0; $i < count($status); $i++) {
             if (CompanyStatus::$map[$status[$i]]) {
@@ -87,7 +86,8 @@ class DaDataCompany extends DaDataService
             'locations'         => $locations_array,
             'locations_boost'   => $locations_boost_array,
         ]);
-        return $this->collection($data['suggestions']);
+
+        return $this->collection(CompanyDataDTO::collect($data['suggestions']));
     }
 
     /**
@@ -116,8 +116,4 @@ class DaDataCompany extends DaDataService
         ]);
     }*/
 
-    protected function collection(array $data): DataCollection
-    {
-        return CompanyDataDTO::collection($data)->wrap('suggestions');
-    }
 }
