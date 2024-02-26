@@ -2,11 +2,10 @@
 
 namespace ForestLynx\DaData;
 
+use ForestLynx\DaData\DTOs\Bank\BankDTO;
 use ForestLynx\DaData\Enums\BankStatus;
 use ForestLynx\DaData\Enums\BankType;
-use ForestLynx\DaData\Enums\CompanyType;
-use Spatie\LaravelData\DataCollection;
-use ForestLynx\DaData\DTOs\Bank\BankDTO;
+use Illuminate\Support\Collection;
 
 /**
  * Class DaDataBank
@@ -21,11 +20,11 @@ class DaDataBank extends DaDataService
      * @return array
      * @throws \Exception
      */
-    public function id(string $bank): array
+    public function id(string $bank): Collection
     {
         $data = $this->suggestApi()->post('rs/findById/bank', ['query' => $bank]);
 
-        return $this->collection($data['suggestions']);
+        return $this->collection(BankDTO::collect($data['suggestions']));
     }
 
     /**
@@ -47,7 +46,7 @@ class DaDataBank extends DaDataService
         array $type = [BankType::BANK, BankType::BANK_BRANCH],
         string $locations = null,
         string $locations_boost = null
-    ): array {
+    ): Collection {
         for ($i = 0; $i < count($status); $i++) {
             if (BankStatus::$map[$status[$i]]) {
                 $status[$i] = BankStatus::$map[$status[$i]];
@@ -87,11 +86,6 @@ class DaDataBank extends DaDataService
             'locations_boost'   => $locations_boost_array,
         ]);
 
-        return $this->collection($data['suggestions']);
-    }
-
-    protected function collection(array $data): DataCollection
-    {
-        return BankDTO::collection($data)->wrap('suggestions');
+        return $this->collection(BankDTO::collect($data['suggestions']));
     }
 }

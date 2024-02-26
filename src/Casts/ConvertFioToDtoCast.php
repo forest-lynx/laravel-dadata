@@ -6,11 +6,12 @@ namespace ForestLynx\DaData\Casts;
 
 use Spatie\LaravelData\Casts\Cast;
 use ForestLynx\DaData\DTOs\Company\FioDTO;
+use Spatie\LaravelData\Support\Creation\CreationContext;
 use Spatie\LaravelData\Support\DataProperty;
 
 class ConvertFioToDtoCast implements Cast
 {
-    public function cast(DataProperty $property, mixed $value, array $context): FioDTO
+    public function cast(DataProperty $property, mixed $value, array $properties, CreationContext $context): FioDTO
     {
         return FioDTO::from($this->convert($value));
     }
@@ -22,7 +23,7 @@ class ConvertFioToDtoCast implements Cast
         $surname = $fio_data[0] ?? '';
         $name = $fio_data[1] ?? '';
         $patronymic = $fio_data[2] ?? '';
-        
+
         return compact('surname', 'name', 'patronymic');
     }
 }

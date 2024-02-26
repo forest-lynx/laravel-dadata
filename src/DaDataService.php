@@ -4,6 +4,8 @@ namespace ForestLynx\DaData;
 
 use ForestLynx\DaData\Services\CleanerDaData;
 use ForestLynx\DaData\Services\SuggestDaData;
+use Illuminate\Support\Collection;
+use Spatie\LaravelData\Data;
 use Spatie\LaravelData\DataCollection;
 
 abstract class DaDataService
@@ -21,7 +23,10 @@ abstract class DaDataService
         $this->timeout = config('dadata.timeout') ?? $this->timeout = env('DADATA_TIMEOUT', 10);
     }
 
-    abstract protected function collection(array $data): DataCollection;
+    protected function collection(array|DataCollection $data): Collection
+    {
+        return collect($data);
+    }
 
     public function getToken(): ?string
     {

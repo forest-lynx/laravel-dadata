@@ -11,4 +11,7 @@ enum CompanyStatus: string
     case ACTIVE        = 'ACTIVE';
     case LIQUIDATING   = 'LIQUIDATING';
     case LIQUIDATED    = 'LIQUIDATED';
+    case BANKRUPT      = 'BANKRUPT';
+    case REORGANIZING  = 'REORGANIZING';
+
 }

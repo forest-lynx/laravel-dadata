@@ -2,12 +2,9 @@
 
 namespace ForestLynx\DaData\Traits;
 
-use ForestLynx\DaData\DTOs\Company\CompanyDataDTO;
-use ForestLynx\DaData\DTOs\Company\SuggestionDTO;
 use ForestLynx\DaData\Exceptions\DaDataException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
-use Spatie\LaravelData\DataCollection;
 
 trait HttpClient
 {

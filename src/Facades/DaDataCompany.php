@@ -15,6 +15,14 @@ use Illuminate\Support\Facades\Facade;
  * string $kpp,
  * BranchType $branch_type,
  * CompanyType $type)
+ * @method \ForestLynx\DaData\DaDataCompany prompt(
+ * string $comapny,
+ * int $count,
+ * array|Collection $status,
+ * CompanyType $type
+ * string $locations,
+ * string $locations_boost
+ * )
  */
 class DaDataCompany extends Facade
 {
