@@ -21,7 +21,7 @@ class BankDataDTO extends Data
         // Корреспондентский счет в ЦБ РФ
         public readonly ?string $correspondent_account,
         // Казначейские счета(для УФК)
-        public readonly ?string $treasury_accounts,
+        public readonly ?array $treasury_accounts,
         // Город для платежного поручения(поля справочника Tnp + Nnp)
         public readonly ?string $payment_city,
         public readonly ?BankNameDTO $name,
