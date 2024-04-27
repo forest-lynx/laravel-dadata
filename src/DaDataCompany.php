@@ -7,10 +7,8 @@ namespace ForestLynx\DaData;
 use ForestLynx\DaData\DTOs\Company\CompanyDataDTO;
 use ForestLynx\DaData\Enums\BranchType;
 use ForestLynx\DaData\Enums\CompanyScope;
-use ForestLynx\DaData\Enums\CompanyStatus;
 use ForestLynx\DaData\Enums\CompanyType;
 use Illuminate\Support\Collection;
-use Spatie\LaravelData\Data;
 
 /**
  * Class DaDataPhone
@@ -24,10 +22,10 @@ class DaDataCompany extends DaDataService
      */
     public function innOrOgrn(
         string $innOrOgrn,
-        int $count = 10,
-        string $kpp = null,
-        BranchType $branch_type = null,
-        CompanyType $type = null
+        ?int $count = 10,
+        ?string $kpp = null,
+        ?BranchType $branch_type = null,
+        ?CompanyType $type = null
     ): Collection {
 
         $data = $this->suggestApi()->post('rs/findById/party', [
@@ -49,20 +47,13 @@ class DaDataCompany extends DaDataService
      */
     public function prompt(
         string $company,
-        int $count = 10,
-        array|Collection $status = [],
-        CompanyType $type = null,
-        string $locations = null,
-        string $locations_boost = null
+        ?int $count = 10,
+        null|array|Collection $status = [],
+        ?CompanyType $type = null,
+        ?string $locations = null,
+        ?string $locations_boost = null
     ): Collection {
-        $status = \collect($status);
-        /*for ($i = 0; $i < count($status); $i++) {
-            if (CompanyStatus::$map[$status[$i]]) {
-                $status[$i] = CompanyStatus::$map[$status[$i]];
-            } else {
-                unset($status[$i]);
-            }
-        }*/
+        $status = collect($status)->values()->toArray();
 
         $locations_array = [];
         if (! is_null($locations)) {
@@ -81,7 +72,7 @@ class DaDataCompany extends DaDataService
         $data = $this->suggestApi()->post('rs/suggest/party', [
             'query'             => $company,
             'count'             => $count,
-            'status'            => array_values($status->toArray()),
+            'status'            => $status,
             'type'              => $type?->value ?? null,
             'locations'         => $locations_array,
             'locations_boost'   => $locations_boost_array,
@@ -99,21 +90,29 @@ class DaDataCompany extends DaDataService
      * @return array
      * @throws \Exception
      */
-    /*public function affiliated(string $id, int $count = 10, array $scope = [CompanyScope::FOUNDERS]): array
-    {
-        for ($i = 0; $i < count($scope); $i++) {
-            if (CompanyScope::$map[$scope[$i]]) {
-                $scope[$i] = CompanyScope::$map[$scope[$i]];
-            } else {
-                unset($scope[$i]);
-            }
+    public function affiliated(
+        string $id,
+        ?int $count = 10,
+        null|array|CompanyScope $scope = [CompanyScope::FOUNDERS]
+    ): Collection {
+
+       if($scope instanceof CompanyScope){
+            $scope = [$scope->value];
+        } else {
+            $scope = collect($scope)->transform(
+                fn($s) => $s instanceof CompanyScope
+                ? $s->name
+                : $s
+            )->filter()->values()->toArray();
         }
 
-        return $this->suggestApi()->post('rs/findAffiliated/party', [
+        $data = $this->suggestApi()->post('rs/findAffiliated/party', [
             'query'             => $id,
             'count'             => $count,
-            'scope'             => array_values($scope),
+            'scope'             => $scope,
         ]);
-    }*/
+
+        return $this->collection(CompanyDataDTO::collect($data['suggestions']));
+    }
 
 }
