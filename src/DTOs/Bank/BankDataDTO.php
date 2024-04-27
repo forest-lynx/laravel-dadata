@@ -32,7 +32,7 @@ class BankDataDTO extends Data
         //Адрес регистрации
         public readonly ?BankAddressDTO $address,
         // Состояние
-        public readonly ?BankStatusDTO $status,
+        public readonly ?BankStateDTO $state,
     ) {
     }
 }

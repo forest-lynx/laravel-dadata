@@ -41,26 +41,22 @@ class DaDataBank extends DaDataService
      */
     public function prompt(
         string $company,
-        int $count = 10,
-        array $status = [BankStatus::ACTIVE],
-        array $type = [BankType::BANK, BankType::BANK_BRANCH],
-        string $locations = null,
-        string $locations_boost = null
+        ?int $count = 10,
+        null|array|Collection $status = [],
+        null|array|BankType $type = null,
+        ?string $locations = null,
+        ?string $locations_boost = null
     ): Collection {
-        for ($i = 0; $i < count($status); $i++) {
-            if (BankStatus::$map[$status[$i]]) {
-                $status[$i] = BankStatus::$map[$status[$i]];
-            } else {
-                unset($status[$i]);
-            }
-        }
+        $status = collect($status)->values()->toArray();
 
-        for ($i = 0; $i < count($type); $i++) {
-            if (BankType::$map[$type[$i]]) {
-                $type[$i] = BankType::$map[$type[$i]];
-            } else {
-                unset($type[$i]);
-            }
+        if($type instanceof BankType){
+            $type = [$type->value];
+        } else {
+            $type = collect($type)->transform(
+                fn($t) => $t instanceof BankType
+                ? $t->name
+                : $t
+            )->filter()->values()->toArray();
         }
 
         $locations_array = [];
@@ -80,8 +76,8 @@ class DaDataBank extends DaDataService
         $data = $this->suggestApi()->post('rs/suggest/bank', [
             'query'             => $company,
             'count'             => $count,
-            'status'            => array_values($status),
-            'type'              => array_values($type),
+            'status'            => $status,
+            'type'              => $type,
             'locations'         => $locations_array,
             'locations_boost'   => $locations_boost_array,
         ]);
